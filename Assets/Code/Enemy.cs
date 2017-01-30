@@ -31,8 +31,8 @@ public class Enemy : MonoBehaviour
     {
         if (hit.gameObject.tag == "Weapon")
         {
-            hasBeenHitByWeapon = true;
-            print("hit by weapon!");
+            body.gravityScale = 1;
+            Destroy(gameObject, 1f);
         }
     }
 
