@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceWars.CSharp", "SpaceWars.CSharp.csproj", "{987622AA-4684-EEA8-2DB3-857654A4357B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceWars.CSharp.Editor", "SpaceWars.CSharp.Editor.csproj", "{F91DE610-C9AF-6EC3-35C1-AC3F3A5D687F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{987622AA-4684-EEA8-2DB3-857654A4357B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{987622AA-4684-EEA8-2DB3-857654A4357B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{987622AA-4684-EEA8-2DB3-857654A4357B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{987622AA-4684-EEA8-2DB3-857654A4357B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F91DE610-C9AF-6EC3-35C1-AC3F3A5D687F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F91DE610-C9AF-6EC3-35C1-AC3F3A5D687F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F91DE610-C9AF-6EC3-35C1-AC3F3A5D687F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F91DE610-C9AF-6EC3-35C1-AC3F3A5D687F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
