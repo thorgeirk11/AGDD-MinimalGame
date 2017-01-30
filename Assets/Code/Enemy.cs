@@ -2,27 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
-
+public class Enemy : MonoBehaviour
+{
     private Rigidbody2D body;
     private new CircleCollider2D collider;
     private Random rand;
 
-    [Range(1, 1000)]
+    [ReadOnly]
     public float speed;
-    [Range(1, 10)]
-    public float minWait;
-    [Range(1, 10)]
-    public float maxWait;
+    [Range(1, 50)]
+    public float minSpeed = 1;
+    [Range(50, 100)]
+    public float maxSpeed = 10;
+    [ReadOnly]
     public bool hasBeenHitByWeapon;
 
-
-	void Start () {
+    void Start()
+    {
         collider = GetComponent<CircleCollider2D>();
         body = GetComponent<Rigidbody2D>();
-        rand = new Random(); 
+        rand = new Random();
 
-        StartCoroutine(Clime());
+        speed = Random.Range(minSpeed, maxSpeed) * 100;
+        body.AddForce(Vector2.up * speed * Time.deltaTime, ForceMode2D.Force);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
@@ -30,14 +32,8 @@ public class Enemy : MonoBehaviour {
         if (hit.gameObject.tag == "Weapon")
         {
             hasBeenHitByWeapon = true;
+            print("hit by weapon!");
         }
     }
 
-    IEnumerator Clime() {
-        while (!hasBeenHitByWeapon)
-        {
-            body.AddForce(Vector2.up * speed * Time.deltaTime, ForceMode2D.Force);
-            yield return new WaitForSeconds(Random.Range(minWait, maxWait));
-        }
-    }
 }
