@@ -19,8 +19,8 @@ public class Enemy : MonoBehaviour
         collider = GetComponent<CircleCollider2D>();
         body = GetComponent<Rigidbody2D>();
 
-        speed = Random.Range(minSpeed, maxSpeed) * 100;
-        body.AddForce(Vector2.up * speed * Time.deltaTime, ForceMode2D.Force);
+        speed = Random.Range(minSpeed, maxSpeed);
+        body.AddForce(Vector2.up * speed, ForceMode2D.Force);
     }
 
     void OnCollisionEnter2D(Collision2D hit)

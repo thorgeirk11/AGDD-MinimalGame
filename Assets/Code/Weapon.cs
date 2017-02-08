@@ -12,8 +12,9 @@ public class Weapon : MonoBehaviour
 
     private Vector2 origin;
     private Rigidbody2D body;
+    private int chainCount;
 
-    private bool isDropping;
+    public bool isDropping { get; private set; }
 
     void Start()
     {
@@ -30,7 +31,7 @@ public class Weapon : MonoBehaviour
         var distance = (origin - end).magnitude;
         var size = 0f;
         var last = GetComponent<Rigidbody2D>();
-        var chainCount = 0;
+        chainCount = 0;
         for (float i = 0; i < distance - size; i += size)
         {
             var joint = Instantiate(ropeJointPrefab);
@@ -101,8 +102,11 @@ public class Weapon : MonoBehaviour
             Destroy(ropeJoints[i - 1].gameObject);
             yield return new WaitForSeconds(.06f);
         }
-        var endRenderer = ropeJoints[ropeJoints.Length - 1].GetComponent<SpriteRenderer>();
-        yield return new WaitWhile(() => endRenderer.isVisible);
+        if (ropeJoints.Length > 1)
+        {
+            var endRenderer = ropeJoints[ropeJoints.Length - 1].GetComponent<SpriteRenderer>();
+            yield return new WaitWhile(() => endRenderer.isVisible);
+        }
         Destroy(gameObject);
     }
 }

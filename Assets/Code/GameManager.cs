@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(1f);
             }
+            defence.weaponActive.DropWeapon();
 
             var canvasgroup = infoBox.GetComponent<CanvasGroup>();
             infoBox.SetTrigger("Show");
