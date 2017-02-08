@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     private Rigidbody2D body;
     private new CircleCollider2D collider;
-    private Random rand;
 
     [ReadOnly]
     public float speed;
@@ -21,7 +18,6 @@ public class Enemy : MonoBehaviour
     {
         collider = GetComponent<CircleCollider2D>();
         body = GetComponent<Rigidbody2D>();
-        rand = new Random();
 
         speed = Random.Range(minSpeed, maxSpeed) * 100;
         body.AddForce(Vector2.up * speed * Time.deltaTime, ForceMode2D.Force);
@@ -31,6 +27,7 @@ public class Enemy : MonoBehaviour
     {
         if (hit.gameObject.tag == "Weapon")
         {
+            Destroy(collider);
             body.gravityScale = 1;
             Destroy(gameObject, 1f);
         }

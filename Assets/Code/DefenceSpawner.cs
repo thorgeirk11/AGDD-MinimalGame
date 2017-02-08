@@ -10,24 +10,27 @@ public class DefenceSpawner : UIBehaviour, IPointerDownHandler//, IPointerUpHand
     Weapon weaponActive;
 
     bool hasSetAncorPoint;
-    
+
+    float nextTimeAllowed;
 
     public void OnPointerDown(PointerEventData touchPoint)
     {
-        if (weaponActive == null || weaponActive.CanBeDropped)
+        var adjustTouch = new Vector2(touchPoint.pressPosition.x, Screen.height-10);
+        var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(adjustTouch), Vector2.zero);
+
+        if (!hasSetAncorPoint)
         {
-            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touchPoint.pressPosition), Vector2.zero);
-            if (!hasSetAncorPoint)
-            {
-                weaponActive = Instantiate(WeaponPrefab);
-                weaponActive.SetOrigin(hit.point);
-                hasSetAncorPoint = true;
-            }
-            else
-            {
-                weaponActive.SetEnd(hit.point);
-                hasSetAncorPoint = false;
-            }
+            if (weaponActive != null)
+                weaponActive.DropWeapon();
+
+            weaponActive = Instantiate(WeaponPrefab);
+            weaponActive.SetOrigin(hit.point);
+            hasSetAncorPoint = true;
+        }
+        else
+        {
+            weaponActive.SetEnd(hit.point);
+            hasSetAncorPoint = false;
         }
     }
 }

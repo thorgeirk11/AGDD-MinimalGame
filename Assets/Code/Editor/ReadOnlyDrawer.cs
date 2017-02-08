@@ -5,9 +5,6 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-public sealed class ReadOnlyAttribute : PropertyAttribute
-{ }
-
 [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
 public class ReadOnlyDrawer : PropertyDrawer
 {

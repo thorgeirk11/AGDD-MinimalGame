@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
     public DefenceSpawner defence;
     public AttackSpawner attack;
 
@@ -13,12 +12,10 @@ public class GameManager : MonoBehaviour
     public Animator infoBox;
     private Text infoText;
 
-
     // Use this for initialization
     void Start()
     {
         infoText = infoBox.GetComponentInChildren<Text>();
-
     }
     public void PlayPressed()
     {
@@ -30,14 +27,22 @@ public class GameManager : MonoBehaviour
 
     IEnumerator StartGame()
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; true; i++)
         {
-            yield return StartCoroutine(attack.StartRound(i, i * 2 + 10));
-            yield return new WaitWhile(() => FindObjectsOfType<Enemy>().Any());
+            var duration = i * 2 + 10;
+            var end = Time.time + duration;
+            StartCoroutine(attack.StartRound(i, duration));
 
+            while (FindObjectsOfType<Enemy>().Any() || Time.time > end)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+
+            var canvasgroup = infoBox.GetComponent<CanvasGroup>();
             infoBox.SetTrigger("Show");
-            infoText.text = "Round " + i;
+            infoText.text = "Round " + (i+1);
             yield return new WaitForSeconds(1f);
+            yield return new WaitWhile(() => canvasgroup.alpha > 0);
         }
     }
 
