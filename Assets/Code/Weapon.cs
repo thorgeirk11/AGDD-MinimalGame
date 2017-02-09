@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
     private Vector2 origin;
     private Rigidbody2D body;
     private int chainCount;
+    public float hitCount;
 
     public bool isDropping { get; private set; }
 
@@ -28,6 +29,8 @@ public class Weapon : MonoBehaviour
 
     internal void SetEnd(Vector2 end)
     {
+        if (isDropping) return;
+
         var distance = (origin - end).magnitude;
         var size = 0f;
         var last = GetComponent<Rigidbody2D>();
