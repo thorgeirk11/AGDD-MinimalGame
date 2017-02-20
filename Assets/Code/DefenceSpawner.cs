@@ -4,34 +4,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DefenceSpawner : UIBehaviour, IPointerDownHandler//, IPointerUpHandler
+public class DefenceSpawner : UIBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     public Weapon WeaponPrefab;
     public Weapon WeaponActive;
 
-    bool hasSetAncorPoint;
+    public bool IsDragging = false;
 
-    public void OnPointerDown(PointerEventData touchPoint)
+    public void OnBeginDrag(PointerEventData touchPoint)
     {
         var adjustTouch = new Vector2(touchPoint.pressPosition.x, Screen.height * 0.93f);
         var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(adjustTouch), Vector2.zero);
 
-        if (WeaponActive != null && WeaponActive.isDropping)
-            hasSetAncorPoint = false;
+        if (WeaponActive != null)
+            WeaponActive.DropWeapon();
 
-        if (!hasSetAncorPoint)
+        WeaponActive = Instantiate(WeaponPrefab);
+        WeaponActive.SetOrigin(hit.point);
+        IsDragging = true;
+    }
+
+    public void OnDrag(PointerEventData touchPoint)
+    {
+        var adjustTouch = new Vector2(touchPoint.position.x, Screen.height * 0.93f);
+        var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(adjustTouch), Vector2.zero);
+
+
+        var wPos = WeaponActive.Origin;
+        var end = wPos;
+        if (wPos.x > hit.point.x)
         {
-            if (WeaponActive != null)
-                WeaponActive.DropWeapon();
-
-            WeaponActive = Instantiate(WeaponPrefab);
-            WeaponActive.SetOrigin(hit.point);
-            hasSetAncorPoint = true;
+            end = wPos + Vector2.left * Vector2.Distance(hit.point, wPos);
         }
         else
         {
-            WeaponActive.SetEnd(hit.point);
-            hasSetAncorPoint = false;
+            end = wPos + Vector2.right * Vector2.Distance(hit.point, wPos);
         }
+        
+        WeaponActive.SetEnd(end);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        WeaponActive.ReleaseWeapon();
+        IsDragging = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (IsDragging) return;
+
+        if (WeaponActive != null)
+            WeaponActive.DropWeapon();
+        WeaponActive = null;
+
     }
 }

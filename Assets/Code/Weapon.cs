@@ -10,30 +10,39 @@ public class Weapon : MonoBehaviour
     public HingeJoint2D ropeJointPrefab;
     public HingeJoint2D endPrefab;
 
-    private Vector2 origin;
+    public Vector2 Origin { get; private set; }
     private Rigidbody2D body;
     private int chainCount;
     public float hitCount;
 
+    private List<Rigidbody2D> chain = new List<Rigidbody2D>();
+    private HingeJoint2D weaponEnd;
+
     public bool isDropping { get; private set; }
 
-    void Start()
+    void Awake()
     {
         body = GetComponent<Rigidbody2D>();
     }
 
     internal void SetOrigin(Vector2 originPoint)
     {
-        transform.position = origin = originPoint;
+        transform.position = Origin = originPoint;
     }
 
     internal void SetEnd(Vector2 end)
     {
         if (isDropping) return;
 
-        var distance = (origin - end).magnitude;
+        for (int i = 0; i < chain.Count; i++)
+        {
+            Destroy(chain[i].gameObject);
+        }
+        chain.Clear();
+
+        var distance = (Origin - end).magnitude;
         var size = 0f;
-        var last = GetComponent<Rigidbody2D>();
+        var last = body;
         chainCount = 0;
         for (float i = 0; i < distance - size; i += size)
         {
@@ -41,35 +50,37 @@ public class Weapon : MonoBehaviour
             size = joint.GetComponent<Collider2D>().bounds.size.x;
             joint.connectedBody = last;
             joint.transform.SetParent(transform, false);
-            joint.transform.position = origin.x < end.x ?
+            joint.transform.position = Origin.x < end.x ?
                                            last.position + new Vector2(size, 0) :
                                            last.position - new Vector2(size, 0);
             last = joint.GetComponent<Rigidbody2D>();
+            chain.Add(last);
             chainCount++;
         }
-        var weaponEnd = Instantiate(endPrefab);
+        weaponEnd = Instantiate(endPrefab);
         weaponEnd.connectedBody = last;
         weaponEnd.transform.SetParent(transform);
         weaponEnd.transform.position = end;
+        chain.Add(weaponEnd.GetComponent<Rigidbody2D>());
 
-        if (chainCount < 2)
-        {
-            DropWeapon();
-        }
-        else
-        {
-            StartCoroutine(MakeStiff(weaponEnd));
-        }
+        foreach (var r in chain)
+            r.constraints = RigidbodyConstraints2D.FreezeAll;
+    }
+    public void ReleaseWeapon()
+    {
+        foreach (var r in chain)
+            r.constraints = RigidbodyConstraints2D.None;
+        StartCoroutine(MakeStiff());
     }
 
-    private IEnumerator MakeStiff(HingeJoint2D weaponEnd)
+    public IEnumerator MakeStiff()
     {
         var trans = weaponEnd.transform;
         //Wait for it to drop.
-        if (trans.position.x > origin.x)
-            yield return new WaitUntil(() => isDropping || trans.position.x < origin.x);
+        if (trans.position.x > Origin.x)
+            yield return new WaitUntil(() => isDropping || trans.position.x < Origin.x);
         else
-            yield return new WaitUntil(() => isDropping || trans.position.x > origin.x);
+            yield return new WaitUntil(() => isDropping || trans.position.x > Origin.x);
 
         if (isDropping) yield break;
         // Slow it down.
@@ -99,10 +110,10 @@ public class Weapon : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = false;
         // Pull the rope up.
         var ropeJoints = GetComponentsInChildren<HingeJoint2D>();
-        for (int i = 1; i < ropeJoints.Length - 1; i++)
+        for (int i = 0; i < ropeJoints.Length - 1; i++)
         {
             //ropeJoints[i].connectedBody = body;
-            Destroy(ropeJoints[i - 1].gameObject);
+            Destroy(ropeJoints[i].gameObject);
             yield return new WaitForSeconds(.06f);
         }
         if (ropeJoints.Length > 1)

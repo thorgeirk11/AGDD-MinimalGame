@@ -50,12 +50,6 @@ public class GameManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(1f);
             }
-            defence.WeaponActive.DropWeapon();
-
-            var canvasgroup = infoBox.GetComponent<CanvasGroup>();
-            infoBox.SetTrigger("Show");
-            infoText.text = "Wave " + (i + 1);
-            yield return new WaitForSeconds(2f);
         }
     }
 
@@ -68,7 +62,10 @@ public class GameManager : MonoBehaviour
         {
             body.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-        StartCoroutine(Utils.Wait(1f, () => GameOverView.gameObject.SetActive(true)));
+        StartCoroutine(Utils.Wait(1f, () => {
+            GameUI.gameObject.SetActive(false);
+            GameOverView.gameObject.SetActive(true);
+        }));
     }
 
     public void Retry()

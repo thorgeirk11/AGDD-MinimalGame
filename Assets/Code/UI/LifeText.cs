@@ -17,26 +17,14 @@ public class LifeText : MonoBehaviour
 
     private int lifes;
     private Text text;
-    private Outline outline;
-
-    public Color Green;
-    public Color Yellow;
-    public Color Red;
+    
         
     private void UpdateUI()
     {
         if (text == null )
         {
             text = GetComponent<Text>();
-            outline = GetComponent<Outline>();
         }
-
-        if (Lifes > 5)
-            outline.effectColor = Green;
-        else if (Lifes > 3)
-            outline.effectColor = Yellow;
-        else
-            outline.effectColor = Red;
 
         text.text = Lifes.ToString();
     }

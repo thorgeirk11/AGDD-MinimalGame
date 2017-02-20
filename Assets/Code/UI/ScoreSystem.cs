@@ -25,7 +25,16 @@ public class ScoreSystem : MonoBehaviour
     public LifeText LifeCounterText;
     public Text ScoreText;
 
-    public float Score;
+    private float _score;
+    public float Score
+    {
+        get { return _score; }
+        set
+        {
+            _score = value;
+            ScoreText.text = Mathf.FloorToInt(_score).ToString();
+        }
+    }
     public float EnemyHitScore = 20;
     public float EnemyReachPenalty = 1f;
     public float MultyKillFactor = 1.5f;
@@ -50,7 +59,6 @@ public class ScoreSystem : MonoBehaviour
         var pointsForHit = weapon.hitCount * velocity;
 
         Score += pointsForHit;
-        ScoreText.text = Score.ToString("##");
 
         var scoreSplash = SpawnScoreSplash(enemy);
         scoreSplash.text = (hits > 1 ? hits + "x" : "") + velocity.ToString("##");

@@ -33,6 +33,5 @@ public class AttackSpawner : UIBehaviour
             if (i + 1 < n)
                 yield return new WaitForSeconds(delta);
         }
-        //yield return new WaitWhile(() => enemies.Any(e => e != null && e.IsVisible));
     }
 }
