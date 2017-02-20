@@ -32,15 +32,16 @@ public class DefenceSpawner : UIBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         var wPos = WeaponActive.Origin;
         var end = wPos;
+        var magnitute = Mathf.Max(Vector2.Distance(hit.point, wPos), 1.2f);
         if (wPos.x > hit.point.x)
         {
-            end = wPos + Vector2.left * Vector2.Distance(hit.point, wPos);
+            end = wPos + Vector2.left * magnitute;
         }
         else
         {
-            end = wPos + Vector2.right * Vector2.Distance(hit.point, wPos);
+            end = wPos + Vector2.right * magnitute;
         }
-        
+
         WeaponActive.SetEnd(end);
     }
 

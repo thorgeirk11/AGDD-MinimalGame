@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 
 public class AttackSpawner : UIBehaviour
 {
-    public Enemy enemyPrefab;
-    public float StartSpeed = 20;
-    public float MaxSpeedDelta = 20;
-    public float SpeedIncrament = 4;
+    public Enemy[] enemyPrefabs;
+    public float StartSpeed = 1;
+    public float MaxSpeedDelta = 0.2f;
+    public float SpeedIncrament = 0.02f;
+
+
 
     public IEnumerator StartRound(int n, float duration)
     {
@@ -24,7 +26,7 @@ public class AttackSpawner : UIBehaviour
             var spawnPosition = new Vector3(Random.Range(enemySize.x, Screen.width - enemySize.x), 0);
             var worldPoint = Camera.main.ScreenToWorldPoint(spawnPosition);
             worldPoint.z = 0;
-            enemies[i] = Instantiate(enemyPrefab, worldPoint, Quaternion.identity);
+            enemies[i] = Instantiate(enemyPrefabs[i % 4 == 0 ? 1 : 0], worldPoint, Quaternion.identity);
 
             var min = SpeedIncrament * i + StartSpeed;
             var max = min + MaxSpeedDelta;

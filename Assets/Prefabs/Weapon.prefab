@@ -78,6 +78,8 @@ MonoBehaviour:
   endPrefab: {fileID: 233451403921093794, guid: 547cc998f25a3f743baffa81ca91ba7e,
     type: 2}
   hitCount: 0
+  InActiveColor: {r: 0.6838235, g: 0.6838235, b: 0.6838235, a: 0.837}
+  ActiveColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!212 &212636883005040558
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -109,7 +111,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: ab63f1be4538487408524c7bde480dde, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

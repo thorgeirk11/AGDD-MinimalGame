@@ -8,14 +8,13 @@ public class Enemy : MonoBehaviour
     private bool hitByWeapon;
 
     private SpriteRenderer spriteRenderer;
+
+    public float SpeedModifier;
+
     public bool IsVisible
     {
         get { return spriteRenderer.isVisible; }
     }
-
-    public float speed;
-    public float minSpeed = 5;
-    public float maxSpeed = 10;
 
     void Awake()
     {
@@ -26,7 +25,7 @@ public class Enemy : MonoBehaviour
 
     public void StartMoving(float speed)
     {
-        body.AddForce(Vector2.up * speed, ForceMode2D.Force);
+        body.velocity = Vector2.up * speed * SpeedModifier;
     }
 
     void Update()
@@ -46,7 +45,7 @@ public class Enemy : MonoBehaviour
             var weapon = hit.gameObject.GetComponentInParent<Weapon>();
             SoundManager.Instance.PlayCollisionSound();
             ScoreSystem.Instance.WeaponHitEnemy(this, weapon, hit);
-
+            
             Destroy(collider);
             body.gravityScale = 1;
             Destroy(gameObject, 1f);

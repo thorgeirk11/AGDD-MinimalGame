@@ -655,8 +655,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842b626d7f59e334aa6a8ac724c500ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 114454282588531242, guid: 8d6f8b0f57a0d6d4e83db22b396be790,
-    type: 2}
-  StartSpeed: 20
-  MaxSpeedDelta: 20
-  SpeedIncrament: 4
+  enemyPrefabs:
+  - {fileID: 114454282588531242, guid: 8d6f8b0f57a0d6d4e83db22b396be790, type: 2}
+  - {fileID: 114454282588531242, guid: 42f0a5487cc7da740bd6517d570b7cc3, type: 2}
+  StartSpeed: 0.8
+  MaxSpeedDelta: 0.2
+  SpeedIncrament: 0.05

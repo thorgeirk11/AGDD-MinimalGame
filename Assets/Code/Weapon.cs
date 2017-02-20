@@ -15,6 +15,9 @@ public class Weapon : MonoBehaviour
     private int chainCount;
     public float hitCount;
 
+    public Color InActiveColor;
+    public Color ActiveColor;
+
     private List<Rigidbody2D> chain = new List<Rigidbody2D>();
     private HingeJoint2D weaponEnd;
 
@@ -40,7 +43,7 @@ public class Weapon : MonoBehaviour
         }
         chain.Clear();
 
-        var distance = (Origin - end).magnitude;
+        var distance = Vector2.Distance(Origin, end);
         var size = 0f;
         var last = body;
         chainCount = 0;
@@ -63,6 +66,10 @@ public class Weapon : MonoBehaviour
         weaponEnd.transform.position = end;
         chain.Add(weaponEnd.GetComponent<Rigidbody2D>());
 
+        foreach (var item in GetComponentsInChildren<SpriteRenderer>())
+        {
+            item.color = InActiveColor;
+        }
         foreach (var r in chain)
             r.constraints = RigidbodyConstraints2D.FreezeAll;
     }
@@ -70,6 +77,10 @@ public class Weapon : MonoBehaviour
     {
         foreach (var r in chain)
             r.constraints = RigidbodyConstraints2D.None;
+        foreach (var item in GetComponentsInChildren<SpriteRenderer>())
+        {
+            item.color = ActiveColor;
+        }
         StartCoroutine(MakeStiff());
     }
 
@@ -102,6 +113,13 @@ public class Weapon : MonoBehaviour
     public void DropWeapon()
     {
         if (isDropping) return;
+        Destroy(weaponEnd.GetComponent<Collider2D>());
+
+        foreach (var item in GetComponentsInChildren<SpriteRenderer>())
+        {
+            item.color = InActiveColor;
+            item.sortingOrder = -1;
+        }
         isDropping = true;
         StartCoroutine(DropWeaponCor());
     }
