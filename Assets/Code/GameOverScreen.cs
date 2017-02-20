@@ -18,17 +18,17 @@ public class GameOverScreen : MonoBehaviour
 
         var curBestWave = PlayerPrefs.GetFloat("bestWave");
         var curBestScore = PlayerPrefs.GetFloat("bestScore");
-        var score = scoreSystem.Score;
+        var score = Mathf.FloorToInt(scoreSystem.Score);
         if (curBestScore < score)
         {
-            PlayerPrefs.SetFloat("bestScore", score);
+            PlayerPrefs.SetInt("bestScore", score);
             curBestScore = score;
         }
 
         var wave = gameManager.CurrentWave;
         if (curBestWave < wave)
         {
-            PlayerPrefs.SetFloat("bestWave", wave);
+            PlayerPrefs.SetInt("bestWave", wave);
             curBestWave = wave;
         }
 

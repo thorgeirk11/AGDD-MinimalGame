@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class DefenceSpawner : UIBehaviour, IPointerDownHandler//, IPointerUpHandler
 {
-    private const int HeighOffset = 100;
     public Weapon WeaponPrefab;
     public Weapon WeaponActive;
 
@@ -14,7 +13,7 @@ public class DefenceSpawner : UIBehaviour, IPointerDownHandler//, IPointerUpHand
 
     public void OnPointerDown(PointerEventData touchPoint)
     {
-        var adjustTouch = new Vector2(touchPoint.pressPosition.x, Screen.height - HeighOffset);
+        var adjustTouch = new Vector2(touchPoint.pressPosition.x, Screen.height * 0.93f);
         var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(adjustTouch), Vector2.zero);
 
         if (WeaponActive != null && WeaponActive.isDropping)

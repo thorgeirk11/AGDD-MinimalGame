@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private Text infoText;
 
     public int CurrentWave { get; private set; }
+    public static bool GameOver { get; private set; }
 
     Coroutine waveSpawner;
 
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
         GameUI.gameObject.SetActive(true);
         defence.gameObject.SetActive(true);
         attack.gameObject.SetActive(true);
+        GameOverView.gameObject.SetActive(false);
         MainMenu.gameObject.SetActive(false);
         waveSpawner = StartCoroutine(StartGame());
     }
@@ -52,14 +54,14 @@ public class GameManager : MonoBehaviour
 
             var canvasgroup = infoBox.GetComponent<CanvasGroup>();
             infoBox.SetTrigger("Show");
-            infoText.text = "Round " + (i + 1);
-            yield return new WaitForSeconds(1f);
-            yield return new WaitWhile(() => canvasgroup.alpha > 0);
+            infoText.text = "Wave " + (i + 1);
+            yield return new WaitForSeconds(2f);
         }
     }
 
-    internal void GameOver()
+    internal void LostGame()
     {
+        GameOver = true;
         StopCoroutine(waveSpawner);
 
         foreach (var body in FindObjectsOfType<Rigidbody2D>())
@@ -72,5 +74,10 @@ public class GameManager : MonoBehaviour
     public void Retry()
     {
         PlayPressed();
+        GameOver = false;
+        foreach (var body in FindObjectsOfType<Enemy>())
+            Destroy(body.gameObject);
+        foreach (var body in FindObjectsOfType<Weapon>())
+            Destroy(body.gameObject);
     }
 }

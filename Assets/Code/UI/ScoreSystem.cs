@@ -53,7 +53,7 @@ public class ScoreSystem : MonoBehaviour
         ScoreText.text = Score.ToString("##");
 
         var scoreSplash = SpawnScoreSplash(enemy);
-        scoreSplash.text = (hits > 1 ? hits + "x" : "")+velocity.ToString("##");
+        scoreSplash.text = (hits > 1 ? hits + "x" : "") + velocity.ToString("##");
     }
 
     private Text SpawnScoreSplash(Enemy enemy)
@@ -66,11 +66,10 @@ public class ScoreSystem : MonoBehaviour
 
     internal void EnemyHitDefence(Enemy enemy)
     {
-        var newLifeCount = LifeCounterText.Lifes--;
-
-        if (newLifeCount == 0)
+        LifeCounterText.Lifes--;
+        if (LifeCounterText.Lifes == 0)
         {
-            gameManager.GameOver();
+            gameManager.LostGame();
         }
     }
 }
