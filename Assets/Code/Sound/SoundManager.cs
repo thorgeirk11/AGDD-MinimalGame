@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -22,13 +23,8 @@ public class SoundManager : MonoBehaviour
     }
 
     public AudioEmitter PlayButtonSound;
-    public AudioEmitter ButtonSounds;
+    public AudioEmitter CollisionSound;
 
-    public AudioEmitter HatDropped;
-    public AudioEmitter Hatcombined;
-    public AudioEmitter HatThrown;
-
-    public AudioEmitter Jump;
     public AudioMixer MainMixer;
 
     public void MuteSounds()
@@ -45,10 +41,8 @@ public class SoundManager : MonoBehaviour
         Instantiate(PlayButtonSound);
     }
 
-    public void JumpSound()
+    internal void PlayCollisionSound()
     {
-        Instantiate(Jump);
+        Instantiate(CollisionSound);
     }
-
-
 }

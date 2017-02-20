@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     }
     public void PlayPressed()
     {
-        scoreSystem.LifeCounterText.Lifes = 10;
+        scoreSystem.LifeCounterText.Lifes = 2;
         scoreSystem.Score = 0;
         GameUI.gameObject.SetActive(true);
         defence.gameObject.SetActive(true);
@@ -43,12 +43,12 @@ public class GameManager : MonoBehaviour
         {
             CurrentWave = i;
             var duration = i * 1.5f + 5;
-            yield return StartCoroutine(attack.StartRound(i, duration));
+            yield return StartCoroutine(attack.StartRound(i*2, duration));
             while (FindObjectsOfType<Enemy>().Any())
             {
                 yield return new WaitForSeconds(1f);
             }
-            defence.weaponActive.DropWeapon();
+            defence.WeaponActive.DropWeapon();
 
             var canvasgroup = infoBox.GetComponent<CanvasGroup>();
             infoBox.SetTrigger("Show");
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         {
             body.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-        Utils.Wait(1f, () => GameOverView.gameObject.SetActive(true));
+        StartCoroutine(Utils.Wait(1f, () => GameOverView.gameObject.SetActive(true)));
     }
 
     public void Retry()

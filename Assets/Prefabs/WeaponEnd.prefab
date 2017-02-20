@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 233451403921093794}
   - component: {fileID: 212682834001510736}
   - component: {fileID: 58757499957042240}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WeaponEnd
   m_TagString: Weapon
   m_Icon: {fileID: 0}

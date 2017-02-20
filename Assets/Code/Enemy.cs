@@ -17,13 +17,15 @@ public class Enemy : MonoBehaviour
     public float minSpeed = 5;
     public float maxSpeed = 10;
 
-    void Start()
+    void Awake()
     {
         collider = GetComponent<CircleCollider2D>();
         body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
-        speed = Random.Range(minSpeed, maxSpeed);
+    public void StartMoving(float speed)
+    {
         body.AddForce(Vector2.up * speed, ForceMode2D.Force);
     }
 
@@ -42,6 +44,7 @@ public class Enemy : MonoBehaviour
         {
             hitByWeapon = true;
             var weapon = hit.gameObject.GetComponentInParent<Weapon>();
+            SoundManager.Instance.PlayCollisionSound();
             ScoreSystem.Instance.WeaponHitEnemy(this, weapon, hit);
 
             Destroy(collider);
