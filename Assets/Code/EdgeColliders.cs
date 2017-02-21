@@ -10,7 +10,7 @@ public class EdgeColliders : MonoBehaviour
     public float zPosition = 0f;
     private Vector2 screenSize;
     //private Transform topCollider;
-    //private Transform bottomCollider;
+    private Transform bottomCollider;
     private Transform leftCollider;
     private Transform rightCollider;
     private Vector3 cameraPos;
@@ -19,30 +19,30 @@ public class EdgeColliders : MonoBehaviour
     {
         //Generate our empty objects
         //topCollider = new GameObject().transform;
-        //bottomCollider = new GameObject().transform;
+        bottomCollider = new GameObject().transform;
         rightCollider = new GameObject().transform;
         leftCollider = new GameObject().transform;
 
         //topCollider.gameObject.layer = 8;
-        //bottomCollider.gameObject.layer = 8;
+        bottomCollider.gameObject.layer = 8;
         rightCollider.gameObject.layer = 8;
         leftCollider.gameObject.layer = 8;
 
         //Name our objects 
         //topCollider.name = "TopCollider";
-        //bottomCollider.name = "BottomCollider";
+        bottomCollider.name = "BottomCollider";
         rightCollider.name = "RightCollider";
         leftCollider.name = "LeftCollider";
 
         //Add the colliders
         //topCollider.gameObject.AddComponent<BoxCollider2D>();
-        //bottomCollider.gameObject.AddComponent<BoxCollider2D>();
+        bottomCollider.gameObject.AddComponent<BoxCollider2D>();
         rightCollider.gameObject.AddComponent<BoxCollider2D>();
         leftCollider.gameObject.AddComponent<BoxCollider2D>();
 
         //Make them the child of whatever object this script is on, preferably on the Camera so the objects move with the camera without extra scripting
         //topCollider.parent = transform;
-        //bottomCollider.parent = transform;
+        bottomCollider.parent = transform;
         rightCollider.parent = transform;
         leftCollider.parent = transform;
 
@@ -61,7 +61,7 @@ public class EdgeColliders : MonoBehaviour
         //topCollider.localScale = new Vector3(screenSize.x * 2, colDepth, colDepth);
         //topCollider.position = new Vector3(cameraPos.x, cameraPos.y + screenSize.y + (topCollider.localScale.y * 0.5f), zPosition);
 
-        //bottomCollider.localScale = new Vector3(screenSize.x * 2, colDepth, colDepth);
-        //bottomCollider.position = new Vector3(cameraPos.x, cameraPos.y - screenSize.y - (bottomCollider.localScale.y * 0.5f), zPosition);
+        bottomCollider.localScale = new Vector3(screenSize.x * 2, colDepth, colDepth);
+        bottomCollider.position = new Vector3(cameraPos.x, cameraPos.y - screenSize.y - (bottomCollider.localScale.y * 0.5f), zPosition);
     }
 }

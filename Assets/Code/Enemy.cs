@@ -5,11 +5,12 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D body;
     private new CircleCollider2D collider;
 
-    private bool hitByWeapon;
+    public bool HitByWeapon { get; private set; }
 
     private SpriteRenderer spriteRenderer;
 
     public float SpeedModifier;
+    private float _speed;
 
     public bool IsVisible
     {
@@ -25,30 +26,38 @@ public class Enemy : MonoBehaviour
 
     public void StartMoving(float speed)
     {
-        body.velocity = Vector2.up * speed * SpeedModifier;
+        _speed = speed;
     }
 
     void Update()
     {
-        if (!hitByWeapon && !IsVisible)
+        if (GameManager.GameOver) return;
+
+        if (!HitByWeapon)
+        {
+            body.velocity = Vector2.up * _speed * SpeedModifier;
+        }
+        if (!HitByWeapon && !IsVisible)
         {
             ScoreSystem.Instance.EnemyHitDefence(this);
-            Destroy(gameObject);
         }
+
+        if (!IsVisible) Destroy(gameObject);
     }
 
     void OnCollisionEnter2D(Collision2D hit)
     {
-        if (hit.gameObject.tag == "Weapon")
+        if (!HitByWeapon && hit.gameObject.tag == "Weapon")
         {
-            hitByWeapon = true;
+            HitByWeapon = true;
             var weapon = hit.gameObject.GetComponentInParent<Weapon>();
             SoundManager.Instance.PlayCollisionSound();
             ScoreSystem.Instance.WeaponHitEnemy(this, weapon, hit);
-            
-            Destroy(collider);
+            GetComponent<TrailRenderer>().enabled = true;
+            //Destroy(collider);
+            gameObject.layer = 9;
             body.gravityScale = 1;
-            Destroy(gameObject, 1f);
+            //Destroy(gameObject, 1f);
         }
     }
 

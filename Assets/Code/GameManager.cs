@@ -14,22 +14,46 @@ public class GameManager : MonoBehaviour
     public RectTransform MainMenu;
     public RectTransform GameUI;
     public RectTransform GameOverView;
-    public Animator infoBox;
-    private Text infoText;
 
     public int CurrentWave { get; private set; }
+
+    public CanvasGroup CountDownGroup;
+    public Text CountDownText;
+    public Image Minus;
+    public Image Plus;
+    private float showTimeCountdown;
+
+    internal void ShowMinusUI(float duration)
+    {
+        Minus.enabled = true;
+        Plus.enabled = false;
+        showTimeCountdown = Time.time + duration;
+    }
+
+    internal void ShowPlusUI(float duration)
+    {
+        Minus.enabled = false;
+        Plus.enabled = true;
+        showTimeCountdown = Time.time + duration;
+    }
+
+    void Update()
+    {
+        if (showTimeCountdown > Time.time)
+        {
+            CountDownGroup.alpha = 1;
+            CountDownText.text = Mathf.CeilToInt(showTimeCountdown - Time.time).ToString();
+        }
+        else CountDownGroup.alpha = 0;
+    }
+
     public static bool GameOver { get; private set; }
 
     Coroutine waveSpawner;
 
-    // Use this for initialization
-    void Start()
-    {
-        infoText = infoBox.GetComponentInChildren<Text>();
-    }
     public void PlayPressed()
     {
-        scoreSystem.LifeCounterText.Lifes = 2;
+        scoreSystem.LifeCounter.Lifes = 3;
         scoreSystem.Score = 0;
         GameUI.gameObject.SetActive(true);
         defence.gameObject.SetActive(true);
@@ -45,8 +69,9 @@ public class GameManager : MonoBehaviour
         {
             CurrentWave = i;
             var duration = i * 1.5f + 5;
-            yield return StartCoroutine(attack.StartRound(i*2, duration));
-            while (FindObjectsOfType<Enemy>().Any())
+            yield return StartCoroutine(attack.StartRound(i, i + 3, duration));
+            if (GameOver) yield break;
+            while (FindObjectsOfType<Enemy>().Any(e => !e.HitByWeapon))
             {
                 yield return new WaitForSeconds(1f);
             }
@@ -62,7 +87,8 @@ public class GameManager : MonoBehaviour
         {
             body.constraints = RigidbodyConstraints2D.FreezeAll;
         }
-        StartCoroutine(Utils.Wait(1f, () => {
+        StartCoroutine(Utils.Wait(1f, () =>
+        {
             GameUI.gameObject.SetActive(false);
             GameOverView.gameObject.SetActive(true);
         }));
@@ -73,6 +99,8 @@ public class GameManager : MonoBehaviour
         PlayPressed();
         GameOver = false;
         foreach (var body in FindObjectsOfType<Enemy>())
+            Destroy(body.gameObject);
+        foreach (var body in FindObjectsOfType<Powerup>())
             Destroy(body.gameObject);
         foreach (var body in FindObjectsOfType<Weapon>())
             Destroy(body.gameObject);

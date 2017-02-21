@@ -20,6 +20,8 @@ public class Weapon : MonoBehaviour
 
     private List<Rigidbody2D> chain = new List<Rigidbody2D>();
     private HingeJoint2D weaponEnd;
+    private float scaleEndTime;
+    private float defaultEndSize;
 
     public bool isDropping { get; private set; }
 
@@ -31,6 +33,20 @@ public class Weapon : MonoBehaviour
     internal void SetOrigin(Vector2 originPoint)
     {
         transform.position = Origin = originPoint;
+    }
+
+    public void ScaleEnd(float modifyer, float modifyerTime)
+    {
+        weaponEnd.transform.localScale = Vector3.one * defaultEndSize * modifyer;
+        scaleEndTime = modifyerTime;
+    }
+
+    private void Update()
+    {
+        if (Time.time > scaleEndTime)
+        {
+            ScaleEnd(1, Time.time + 10000);
+        }
     }
 
     internal void SetEnd(Vector2 end)
@@ -64,6 +80,8 @@ public class Weapon : MonoBehaviour
         weaponEnd.connectedBody = last;
         weaponEnd.transform.SetParent(transform);
         weaponEnd.transform.position = end;
+        weaponEnd.GetComponent<Collider2D>().enabled = false;
+        defaultEndSize = weaponEnd.transform.localScale.x;
         chain.Add(weaponEnd.GetComponent<Rigidbody2D>());
 
         foreach (var item in GetComponentsInChildren<SpriteRenderer>())
@@ -75,6 +93,7 @@ public class Weapon : MonoBehaviour
     }
     public void ReleaseWeapon()
     {
+        weaponEnd.GetComponent<Collider2D>().enabled = true;
         foreach (var r in chain)
             r.constraints = RigidbodyConstraints2D.None;
         foreach (var item in GetComponentsInChildren<SpriteRenderer>())
@@ -113,7 +132,7 @@ public class Weapon : MonoBehaviour
     public void DropWeapon()
     {
         if (isDropping) return;
-        Destroy(weaponEnd.GetComponent<Collider2D>());
+        weaponEnd.GetComponent<Collider2D>().enabled = false;
 
         foreach (var item in GetComponentsInChildren<SpriteRenderer>())
         {

@@ -22,7 +22,7 @@ public class ScoreSystem : MonoBehaviour
     }
 
     public GameManager gameManager;
-    public LifeText LifeCounterText;
+    public LifeText LifeCounter;
     public Text ScoreText;
 
     private float _score;
@@ -74,8 +74,8 @@ public class ScoreSystem : MonoBehaviour
 
     internal void EnemyHitDefence(Enemy enemy)
     {
-        LifeCounterText.Lifes--;
-        if (LifeCounterText.Lifes == 0)
+        LifeCounter.Lifes--;
+        if (LifeCounter.Lifes == 0)
         {
             gameManager.LostGame();
         }

@@ -14,7 +14,7 @@ public class GameOverScreen : MonoBehaviour
         var scoreSystem = GetComponentInParent<ScoreSystem>();
         var gameManager = GetComponentInParent<GameManager>();
 
-        var curBestScore = PlayerPrefs.GetFloat("bestScore");
+        var curBestScore = PlayerPrefs.GetInt("bestScore");
         var score = Mathf.FloorToInt(scoreSystem.Score);
         if (curBestScore < score)
         {
