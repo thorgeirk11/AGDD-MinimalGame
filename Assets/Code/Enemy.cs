@@ -6,6 +6,8 @@ public class Enemy : MonoBehaviour
     private new CircleCollider2D collider;
 
     public bool HitByWeapon { get; private set; }
+    public StateActionPair SpawnInfo { get; set; }
+    public AIInterface AI { get; set; }
 
     private SpriteRenderer spriteRenderer;
 
@@ -19,6 +21,7 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
+
         collider = GetComponent<CircleCollider2D>();
         body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -39,6 +42,7 @@ public class Enemy : MonoBehaviour
         }
         if (!HitByWeapon && !IsVisible)
         {
+            AI.LateRewardMax(SpawnInfo);
             ScoreSystem.Instance.EnemyHitDefence(this);
         }
 
@@ -49,6 +53,7 @@ public class Enemy : MonoBehaviour
     {
         if (!HitByWeapon && hit.gameObject.tag == "Weapon")
         {
+            AI.LateReward(SpawnInfo, this);
             HitByWeapon = true;
             var weapon = hit.gameObject.GetComponentInParent<Weapon>();
             SoundManager.Instance.PlayCollisionSound();
